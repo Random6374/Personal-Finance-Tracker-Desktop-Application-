@@ -1,27 +1,48 @@
 import tkinter as t
 import csv  as c
 
+def show_all():
+    print(l)
+
+
 def expense():
     with open ("expenses.csv","a",newline='') as l:
         write=c.writer(l)
         write.writerow([e2.get(),int(e.get()),e1.get(),e3.get()])
     
+def show_screen():
+    menu.pack_forget()
+    review.pack_forget()
+    add_expense.pack_forget()
+    show.pack(fill="both",expand=True)
+    
 def add_screen():
     menu.pack_forget()
     review.pack_forget()
+    show.pack_forget()
     add_expense.pack(fill="both",expand=True)
 
 def menu_screen():
     add_expense.pack_forget()
     review.pack_forget()
+    show.pack_forget()
     menu.pack(fill="both",expand=True)
 
 def review_screen():
     menu.pack_forget()
     add_expense.pack_forget()
+    show.pack_forget()
     review.pack(fill="both",expand=True)
-    
+################################################################################
+# #creating the database
+l=[]
+with open("expenses.csv",newline="",encoding="utf-8") as f:
+    reader=c.reader(f)
+    for row in reader:
+        l.append(row)
 
+###############################################################################
+#defining the screen
 m=t.Tk()
 m.title("Expense Tracker")
 
@@ -30,6 +51,7 @@ m.title("Expense Tracker")
 menu=t.Frame(m,bg='lightblue')
 add_expense=t.Frame(m,bg='lightblue')
 review=t.Frame(m,background="lightblue")
+show=t.Frame(m,background="lightblue")
 #############################################################################
 menu.pack(fill='both',expand=True)
 button=t.Button(menu,text='Add expense',background='lightgray',activebackground='red',command=add_screen).pack()
@@ -52,16 +74,15 @@ e2.grid(row=2,column=1)
 e3.grid(row=3,column=1)
 b=t.Button(add_expense,text="submit",background='lightgray',activebackground='blue',command=expense).grid(row=4)
 button=t.Button(add_expense,text="back",background='lightgray',activebackground='red',command=menu_screen).grid()
-###############################################################################
-# for loop to read the expenses 
-count=0
-with open ("expenses.csv",'r') as f:
-    for line in f:
-        count+=1
 
-for _ in range(0,count):
-    pass
+#########################################################################################
 # The Review screen
 button=t.Button(review,text="Back",background='lightgray',activebackground="Red",command=menu_screen).pack()
+button=t.Button(review,text="show all",background="lightgray",activebackground="red",command=show_screen).pack()
+
+#########################################################################################
+#The Show Screen
+button=t.Button(show,text="Back",background="lightgray",activeforeground="red",command=menu_screen).grid(row=0)
+l=t.Label(show,text=l).grid(row=1)
 
 m.mainloop() 
